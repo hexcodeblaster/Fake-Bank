@@ -10,6 +10,6 @@ authors = [
     {name = "Tanuj Guha Thakurta", email = "tanuj414junat@gmail.com"}
 ]
 dependencies = [
-    "fastapi>=0.120.4",
+    "fastapi[standard]>=0.120.4",
     "sqlalchemy>=2.0.44",
 ]
