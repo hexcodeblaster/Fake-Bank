@@ -13,3 +13,9 @@ dependencies = [
     "fastapi[standard]>=0.120.4",
     "sqlalchemy>=2.0.44",
 ]
+
+[tool.setuptools]
+packages = ["app"]
+
+[tool.setuptools.package-dir]
+app = "app"

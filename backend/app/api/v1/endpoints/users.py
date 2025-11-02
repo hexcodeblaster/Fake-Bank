@@ -1,13 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 
-app = FastAPI()
+router = APIRouter()
 
-@app.get('/')
+@router.get('/', tags=['nothing', 'money'])
 def landing_page():
-    print("Hello world")
     return "Hello world"
 
-@app.get('/index')
+@router.get('/index', tags=['index', 'money'])
 def index_page():
-    print("Hello from index")
     return "Hello from index"
