@@ -10,12 +10,15 @@ authors = [
     {name = "Tanuj Guha Thakurta", email = "tanuj414junat@gmail.com"}
 ]
 dependencies = [
+    "alembic>=1.17.1",
     "fastapi[standard]>=0.120.4",
+    "psycopg2>=2.9.11",
+    "pydantic-settings>=2.11.0",
     "sqlalchemy>=2.0.44",
 ]
 
 [tool.setuptools]
-packages = ["app"]
+packages = { find ={}}
 
 [tool.setuptools.package-dir]
 app = "app"

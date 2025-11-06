@@ -1,11 +1,14 @@
 from fastapi import FastAPI, APIRouter
 
+from app.schemas.users import User
+
 router = APIRouter()
 
-@router.get('/', tags=['nothing', 'money'])
-def landing_page():
+@router.get('/{user_id}')
+def landing_page(user_id: str) -> User:
+    print("Got user id :",user_id)
     return "Hello world"
 
-@router.get('/index', tags=['index', 'money'])
+@router.get('/index')
 def index_page():
     return "Hello from index"
