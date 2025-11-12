@@ -3,7 +3,6 @@ from sqlalchemy.exc import IntegrityError
 
 from app.models import User
 
-
 class TestUserModel:
     def test_user_model_creation(self, session):
         user_1 = User(
