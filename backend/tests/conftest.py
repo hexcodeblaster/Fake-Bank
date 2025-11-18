@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -21,3 +23,7 @@ def session(test_engine):
     session = sessionmaker(bind=test_engine)()
     yield session
     session.close()
+
+@pytest.fixture
+def get_current_time():
+    return datetime.now()
