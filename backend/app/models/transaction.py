@@ -1,7 +1,9 @@
 from typing import Any
 
-from sqlalchemy import Column, ForeignKey, Integer, Float, Enum, CheckConstraint
+from sqlalchemy import (CheckConstraint, Column, Enum, Float, ForeignKey,
+                        Integer)
 from sqlalchemy.orm import validates
+
 from app.models import Base
 
 
@@ -10,15 +12,13 @@ class Transaction(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     amount = Column(Float, nullable=False)
-    type = Column(Enum('credit', 'debit', name='transaction_type'), nullable=False)
+    type = Column(Enum("credit", "debit", name="transaction_type"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
     account_id = Column(Integer, ForeignKey("accounts.id"))
 
-    __table_args__ = (
-        CheckConstraint('amount > 0', name="check_amount_is_positive"),
-    )
+    __table_args__ = (CheckConstraint("amount > 0", name="check_amount_is_positive"),)
 
-    @validates('amount')
+    @validates("amount")
     def validate_age(self, _: str, amount: Any) -> float:
         """
         Validates age

@@ -1,13 +1,16 @@
 from datetime import datetime
 
-from app.schemas.user import UserBase, UserCreate, UserUpdate, UserResponse, UserResponseWithAccounts, UserResponseWithAddress, UserInDB
+from pydantic import SecretStr
+
 from app.schemas.account import AccountResponse
 from app.schemas.address import AddressResponse
+from app.schemas.user import (UserResponseWithAccounts,
+                              UserResponseWithAddress, UserUpdate)
 from tests.factories.schemas.user import UserSchemaFactory
-from pydantic import SecretStr
 
 UserResponseWithAccounts.model_rebuild()
 UserResponseWithAddress.model_rebuild()
+
 
 class TestUserSchema:
     def test_user_base(self):
@@ -30,7 +33,9 @@ class TestUserSchema:
         assert user_update.phone_number is None
 
     def test_user_response(self, get_current_time):
-        user_response = UserSchemaFactory.get_user_response(full_name="user response", creation_time=get_current_time)
+        user_response = UserSchemaFactory.get_user_response(
+            full_name="user response", creation_time=get_current_time
+        )
         assert user_response.email == "testemail@mail.com"
         assert user_response.full_name == "user response"
         assert user_response.phone_number == "9876543210"
@@ -49,12 +54,16 @@ class TestUserSchema:
         assert user_response_with_accounts.id == 1
         assert user_response_with_accounts.created_at == get_current_time
         assert user_response_with_accounts.updated_at is None
-        assert user_response_with_accounts.accounts == UserSchemaFactory.default_account_response()
+        assert (
+            user_response_with_accounts.accounts
+            == UserSchemaFactory.default_account_response()
+        )
 
     def test_user_response_with_addresses(self, get_current_time):
-        user_response_with_addresses = UserSchemaFactory.get_user_response_with_addresses(
-            full_name="user response with address",
-            creation_time=get_current_time
+        user_response_with_addresses = (
+            UserSchemaFactory.get_user_response_with_addresses(
+                full_name="user response with address", creation_time=get_current_time
+            )
         )
         assert user_response_with_addresses.email == "testemail@mail.com"
         assert user_response_with_addresses.full_name == "user response with address"
@@ -62,12 +71,14 @@ class TestUserSchema:
         assert user_response_with_addresses.id == 1
         assert user_response_with_addresses.created_at == get_current_time
         assert user_response_with_addresses.updated_at is None
-        assert user_response_with_addresses.addresses == UserSchemaFactory.default_address_response()
+        assert (
+            user_response_with_addresses.addresses
+            == UserSchemaFactory.default_address_response()
+        )
 
     def test_user_in_db(self, get_current_time):
         user_in_db = UserSchemaFactory.get_user_in_db(
-            full_name="user in db",
-            creation_time=get_current_time
+            full_name="user in db", creation_time=get_current_time
         )
         assert user_in_db.email == "testemail@mail.com"
         assert user_in_db.full_name == "user in db"

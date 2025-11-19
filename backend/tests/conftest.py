@@ -24,6 +24,7 @@ def session(test_engine):
     yield session
     session.close()
 
+
 @pytest.fixture
 def get_current_time():
     return datetime.now()

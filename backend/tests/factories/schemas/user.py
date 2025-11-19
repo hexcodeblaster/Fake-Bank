@@ -5,8 +5,8 @@ from pydantic import SecretStr
 from app.schemas.account import AccountResponse, AccountType, CurrencyType
 from app.schemas.address import AddressResponse
 from app.schemas.user import (UserBase, UserCreate, UserInDB, UserResponse,
-                               UserResponseWithAccounts,
-                               UserResponseWithAddress, UserUpdate)
+                              UserResponseWithAccounts,
+                              UserResponseWithAddress, UserUpdate)
 
 
 class UserSchemaFactory:
