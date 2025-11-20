@@ -50,7 +50,7 @@ class UserSchemaFactory:
         ]
 
     @staticmethod
-    def default_address_response() -> list[AddressResponse]:
+    def default_address_response_list() -> list[AddressResponse]:
         return [
             AddressResponse(
                 house_number="1/62A",
@@ -88,11 +88,13 @@ class UserSchemaFactory:
 
     @classmethod
     def get_user_base(cls, **overrides) -> UserBase:
-        return UserBase(**cls.base_data(), **overrides)
+        return UserBase(**{**cls.base_data(), **overrides})
 
     @classmethod
     def get_user_create(cls, **overrides) -> UserCreate:
-        return UserCreate(**cls.base_data(), password=SecretStr("secret"), **overrides)
+        return UserCreate(
+            **{**cls.base_data(), "password": SecretStr("secret"), **overrides}
+        )
 
     @classmethod
     def get_user_update(cls, **overrides) -> UserUpdate:
@@ -101,7 +103,7 @@ class UserSchemaFactory:
     @classmethod
     def get_user_response(cls, *, creation_time: datetime, **overrides) -> UserResponse:
         return UserResponse(
-            **cls.base_response(creation_time=creation_time), **overrides
+            **{**cls.base_response(creation_time=creation_time), **overrides}
         )
 
     @classmethod
@@ -109,9 +111,11 @@ class UserSchemaFactory:
         cls, *, creation_time: datetime, **overrides
     ) -> UserResponseWithAccounts:
         return UserResponseWithAccounts(
-            **cls.base_response(creation_time=creation_time),
-            accounts=cls.default_accounts_response_list(),
-            **overrides
+            **{
+                **cls.base_response(creation_time=creation_time),
+                "accounts": cls.default_accounts_response_list(),
+                **overrides,
+            }
         )
 
     @classmethod
@@ -119,15 +123,19 @@ class UserSchemaFactory:
         cls, *, creation_time: datetime, **overrides
     ) -> UserResponseWithAddress:
         return UserResponseWithAddress(
-            **cls.base_response(creation_time=creation_time),
-            addresses=cls.default_address_response(),
-            **overrides
+            **{
+                **cls.base_response(creation_time=creation_time),
+                "addresses": cls.default_address_response_list(),
+                **overrides,
+            }
         )
 
     @classmethod
     def get_user_in_db(cls, *, creation_time: datetime, **overrides):
         return UserInDB(
-            **cls.base_response(creation_time=creation_time),
-            hashed_password="secret",
-            **overrides
+            **{
+                **cls.base_response(creation_time=creation_time),
+                "hashed_password": "secret",
+                **overrides,
+            }
         )

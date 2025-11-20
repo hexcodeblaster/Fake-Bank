@@ -4,8 +4,11 @@ from pydantic import SecretStr
 
 from app.schemas.account import AccountResponse
 from app.schemas.address import AddressResponse
-from app.schemas.user import (UserResponseWithAccounts,
-                              UserResponseWithAddress, UserUpdate)
+from app.schemas.user import (
+    UserResponseWithAccounts,
+    UserResponseWithAddress,
+    UserUpdate,
+)
 from tests.factories.schemas.user import UserSchemaFactory
 
 UserResponseWithAccounts.model_rebuild()
@@ -56,7 +59,7 @@ class TestUserSchema:
         assert user_response_with_accounts.updated_at is None
         assert (
             user_response_with_accounts.accounts
-            == UserSchemaFactory.default_account_response()
+            == UserSchemaFactory.default_accounts_response_list()
         )
 
     def test_user_response_with_addresses(self, get_current_time):
@@ -73,7 +76,7 @@ class TestUserSchema:
         assert user_response_with_addresses.updated_at is None
         assert (
             user_response_with_addresses.addresses
-            == UserSchemaFactory.default_address_response()
+            == UserSchemaFactory.default_address_response_list()
         )
 
     def test_user_in_db(self, get_current_time):

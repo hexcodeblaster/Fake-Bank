@@ -27,26 +27,28 @@ class AddressSchemaFactory:
 
     @classmethod
     def get_address_base(cls, **overrides) -> AddressBase:
-        return AddressBase(**cls.base_data(), **overrides)
+        return AddressBase(**{**cls.base_data(), **overrides})
 
     @classmethod
     def get_address_create(cls, **overrides) -> AddressCreate:
-        return AddressCreate(**cls.base_data(), user_id=1, **overrides)
+        return AddressCreate(**{**cls.base_data(), "user_id": 1, **overrides})
 
     @classmethod
     def get_address_response(cls, **overrides) -> AddressResponse:
-        return AddressResponse(**cls.response_data(), **overrides)
+        return AddressResponse(**{**cls.response_data(), **overrides})
 
     @classmethod
     def get_address_response_with_user(cls, **overrides) -> AddressResponseWithUser:
         return AddressResponseWithUser(
-            **cls.response_data(),
-            user=UserSchemaFactory.get_user_response(
-                creation_time=UserSchemaFactory.creation_time
-            ),
-            **overrides
+            **{
+                **cls.response_data(),
+                "user": UserSchemaFactory.get_user_response(
+                    creation_time=UserSchemaFactory.creation_time
+                ),
+                **overrides,
+            }
         )
 
     @classmethod
     def get_address_in_db(cls, **overrides) -> AddressInDB:
-        return AddressInDB(**cls.response_data(), **overrides)
+        return AddressInDB(**{**cls.response_data(), **overrides})

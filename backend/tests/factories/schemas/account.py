@@ -28,24 +28,26 @@ class AccountSchemaFactory:
 
     @classmethod
     def get_account_base(cls, **overrides) -> AccountBase:
-        return AccountBase(**cls.base_data(), **overrides)
+        return AccountBase(**{**cls.base_data(), **overrides})
 
     @classmethod
     def get_account_create(cls, **overrides) -> AccountCreate:
-        return AccountCreate(**cls.base_data(), user_id=1, **overrides)
+        return AccountCreate(**{**cls.base_data(), "user_id": 1, **overrides})
 
     @classmethod
     def get_account_response(cls, **overrides) -> AccountResponse:
-        return AccountResponse(**cls.response_data(), **overrides)
+        return AccountResponse(**{**cls.response_data(), **overrides})
 
     @classmethod
     def get_account_with_user_response(cls, **overrides) -> AccountWithUserResponse:
         return AccountWithUserResponse(
-            **cls.response_data(),
-            user=UserSchemaFactory.get_user_response(
-                creation_time=UserSchemaFactory.creation_time
-            ),
-            **overrides
+            **{
+                **cls.response_data(),
+                "user": UserSchemaFactory.get_user_response(
+                    creation_time=UserSchemaFactory.creation_time
+                ),
+                **overrides,
+            }
         )
 
     @classmethod
@@ -54,4 +56,4 @@ class AccountSchemaFactory:
 
     @classmethod
     def get_account_in_db(cls, **overrides) -> AccountInDB:
-        return AccountInDB(**cls.response_data(), **overrides)
+        return AccountInDB(**{**cls.response_data(), **overrides})
