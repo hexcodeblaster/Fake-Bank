@@ -1,7 +1,6 @@
 from typing import Any
 
-from sqlalchemy import (CheckConstraint, Column, Enum, Float, ForeignKey,
-                        Integer)
+from sqlalchemy import CheckConstraint, Column, Enum, Float, ForeignKey, Integer
 from sqlalchemy.orm import validates
 
 from app.models import Base
