@@ -1,5 +1,3 @@
-import time
-
 from tests.factories.schemas.address import (
     AddressSchemaFactory,
     AddressResponseWithUser,
@@ -50,6 +48,7 @@ class TestAddressSchema:
             address_response_with_user.user.created_at
             == UserSchemaFactory.creation_time
         )
+        assert isinstance(address_response_with_user.user, UserResponse)
 
     def test_address_in_db(self):
         address_in_db = AddressSchemaFactory.get_address_in_db(user_id=10)

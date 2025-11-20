@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import pytest
 from pydantic import SecretStr
 
 from app.schemas.account import AccountResponse
@@ -9,6 +10,7 @@ from app.schemas.user import (
     UserResponseWithAddress,
     UserUpdate,
 )
+from sqlalchemy.testing.suite.test_reflection import users
 from tests.factories.schemas.user import UserSchemaFactory
 
 UserResponseWithAccounts.model_rebuild()
@@ -27,7 +29,7 @@ class TestUserSchema:
         assert user_create.email == "testemail@mail.com"
         assert user_create.full_name == "user create"
         assert user_create.phone_number == "9876543210"
-        assert user_create.password == SecretStr("secret")
+        assert user_create.password.get_secret_value() == "secret"
 
     def test_user_update(self):
         user_update = UserUpdate(full_name="user update")
@@ -58,8 +60,8 @@ class TestUserSchema:
         assert user_response_with_accounts.created_at == get_current_time
         assert user_response_with_accounts.updated_at is None
         assert (
-            user_response_with_accounts.accounts
-            == UserSchemaFactory.default_accounts_response_list()
+                user_response_with_accounts.accounts
+                == UserSchemaFactory.default_accounts_response_list()
         )
 
     def test_user_response_with_addresses(self, get_current_time):
@@ -75,8 +77,8 @@ class TestUserSchema:
         assert user_response_with_addresses.created_at == get_current_time
         assert user_response_with_addresses.updated_at is None
         assert (
-            user_response_with_addresses.addresses
-            == UserSchemaFactory.default_address_response_list()
+                user_response_with_addresses.addresses
+                == UserSchemaFactory.default_address_response_list()
         )
 
     def test_user_in_db(self, get_current_time):
@@ -90,3 +92,22 @@ class TestUserSchema:
         assert user_in_db.created_at == get_current_time
         assert user_in_db.updated_at is None
         assert user_in_db.hashed_password == "secret"
+
+    def test_email_validity(self):
+        with pytest.raises(ValueError) as value_error:
+            UserSchemaFactory.get_user_base(email="invalid_email")
+        error = value_error.value.errors()[0]
+        assert error["type"] == "value_error"
+        assert error["input"] == "invalid_email"
+
+    def test_user_update_email_validity(self):
+        with pytest.raises(ValueError) as value_error:
+            UserSchemaFactory.get_user_update(email= "invalid_email")
+        error = value_error.value.errors()[0]
+        assert error["type"] == "value_error"
+        assert error["input"] == "invalid_email"
+
+    def test_user_response_does_not_contain_passwords(self,get_current_time):
+        user_response = UserSchemaFactory.get_user_response(creation_time=get_current_time).model_dump()
+        assert "password" not in user_response
+        assert "hashed_password" not in user_response

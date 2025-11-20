@@ -46,3 +46,4 @@ class TestAccountSchema:
                 creation_time=UserSchemaFactory.creation_time
             )
         )
+        assert isinstance(account_response_with_response.user, UserResponse)
