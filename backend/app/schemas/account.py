@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
     from app.schemas.user import UserResponse
@@ -21,7 +21,7 @@ class CurrencyType(str, Enum):
 
 class AccountBase(BaseModel):
     type: AccountType
-    balance: float
+    balance: float = Field(... , ge=0)
     currency: CurrencyType
 
 
