@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import TYPE_CHECKING
-
+from decimal import Decimal
 from pydantic import BaseModel, ConfigDict, Field
 
 if TYPE_CHECKING:
@@ -18,12 +18,13 @@ class CurrencyType(str, Enum):
     USD = "USD"
     JPY = "JPY"
 
+class AmountRequest(BaseModel):
+    amount: Decimal = Field(..., ge=0, decimal_places=2)
 
 class AccountBase(BaseModel):
     type: AccountType
-    balance: float = Field(... , ge=0)
+    balance: Decimal = Field(... , ge=0)
     currency: CurrencyType
-
 
 class AccountCreate(AccountBase):
     user_id: int
@@ -37,13 +38,6 @@ class AccountResponse(AccountBase):
 
 class AccountWithUserResponse(AccountResponse):
     user: "UserResponse"
-
-
-class AccountUpdate(BaseModel):
-    balance: float | None = None
-    currency: CurrencyType | None = None
-    type: AccountType | None = None
-
 
 class AccountInDB(AccountResponse):
     pass
